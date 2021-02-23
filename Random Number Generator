@@ -3,6 +3,7 @@
 //Author: David Tollett
 //Instructions: Enter any positive value for range, and any 
 //positive number for number of generations
+//Language: C/C++
 //
 
 #include <stdio.h>
