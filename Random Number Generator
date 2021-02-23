@@ -1,0 +1,79 @@
+//
+//Random Number Generator (C language):
+//Author: David Tollett
+//Instructions: Enter any positive value for range, and any 
+//positive number for number of generations
+//
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+void gen(void);
+
+int main(void)
+{
+    printf("Welcome to the RNG system!\n");
+
+    gen();
+}
+
+void gen(void)
+{
+
+    int range = 0;
+    int num = 0;
+    int loop = 1;
+    int loop_end = 0;
+    int cycle = 1;
+
+    printf("What number would you like to be your range?\n");
+    scanf("%d", &range);
+
+    while (range <= 0)
+    {
+        printf("Invalid input, please enter a number larger than 0\n");
+        scanf("%d", &range);
+    }
+
+    while (cycle != 0)
+    {
+        printf("How many numbers would you like to generate?\n");
+        scanf("%d", &loop_end);
+        
+        while (loop_end <= 0)
+        {
+            printf("Invalid input, please enter a number larger than 0\n");
+            scanf("%d", &lood_end);
+        }
+        
+        loop_end += 1; //Offsets C starting from 0 instead of 1
+
+        time_t seed = time(NULL); //Pulls a random seed based off the time
+        srand(seed);
+
+        while (loop != loop_end)
+        {
+
+            num = 1 + (rand() % range); //Generates the random number
+
+            printf("%d. Your number is %d\n", loop, num);
+
+            loop += 1;
+
+        }
+
+        printf("Would you like to generate another set of number?\n");
+        printf("If not, type 0. If yes, type in the range you want\n");
+        scanf("%d", &cycle);
+        if (cycle != 0)//Resets the loop, and has range equal the users input
+        {
+            range = cycle;
+            loop = 1;
+        }
+        else
+        {
+            exit(0);
+        }
+    }
+}
