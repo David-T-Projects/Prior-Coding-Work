@@ -1,0 +1,93 @@
+#Basic Physics Calculator
+#Author: David Tollett
+#Language: Python
+import sys
+
+def velocity(x,y):
+  ans = x / y
+  return ans
+
+def force(x,y):
+  ans = x * y
+  return ans
+
+def acc1(x,y,z):
+  a = x - y
+  ans = a / z
+  return ans
+
+def Exit():
+  exit = input("\nWould you like to quit? Yes or No >")
+  if exit == "Yes":
+    sys.exit()#Force Quits the process
+
+def Form():
+  form = input("\nWould you like to see the formula? Yes or No>")
+  if form == "Yes":
+    if main_choice == "1":
+      print("Change in X position/Seconds")
+    if main_choice == "2":
+      print("Force = Mass x Acceleration")
+    if main_choice == "3":
+      print("Acceleration = (Velocity Final - Velocity Inital)/Time")
+    if main_choice == "4":
+      print("Acceleration = Force/Mass")
+    if main_choice == "5":
+      print("Mass = Force/Acceleration")
+  if form == "No":
+    aaa = 2 
+  
+
+#This code segment is the main choice screen, where the user picks their calculation, and the path for calculating Velocity. If choices and while loops make up the logical components of the algorithim.
+print("Welcome to Physics Solver")
+Loop_value = True 
+while Loop_value == True:
+  main_choice = input("\nChoose one of the following:\n1. Velocity\n2. Force\n3. Acceleration (Knowing Velocity and Time)\n4. Acceleration (Knowing Force and Mass)\n5. Mass (Knowing Force and Acceleration)\n>")
+#This code calculates velocity when the user inputs the number of meters, and the amount of time taken
+  if main_choice == "1":
+    print("First number is meters, and the second is the time taken")
+    first_num = float(input())
+    second_num = float(input())
+    result = velocity(first_num, second_num)
+    print(result, "meter(s) per second")
+    Form()
+    Exit() 
+ #Form, Exit, and Main_Choice are all algorithims that work together to display the result, as well as how to get it, and to keep the program flowing smoothly and logically. Main choice selects the calcualtion, Form displays the formula upon user request, and Exit ends the while loop so it does not continue indefinitaly.
+
+  if main_choice == "2":
+    print("First number is mass, and the second is the acceleration")
+    first_num = float(input())
+    second_num = float(input())
+    result = force(first_num, second_num)
+    print(result, "Joules")
+    Form()
+    Exit()
+
+  if main_choice == "3":
+    print("First number is velocity final, the second number is velocity initial, and the third number is time in seconds")
+    first_num = float(input())
+    second_num = float(input())
+    third_num = float(input())
+    result = acc1(first_num, second_num, third_num)
+    print(result, "meter(s) per second squared")
+    Form()
+    Exit()
+
+  if main_choice == "4":
+    print("First number is force, and the second is the mass")
+    first_num = float(input())
+    second_num = float(input())
+    result = velocity(first_num, second_num)
+    print(result, "meter(s) per second squared")
+    Form()
+    Exit()
+
+  if main_choice == "5":
+    print("First number is Force, and the second is the acceleration")
+    first_num = float(input())
+    second_num = float(input())
+    result = velocity(first_num, second_num)
+    print(result, "grams")
+    Form()
+    Exit()
+  
