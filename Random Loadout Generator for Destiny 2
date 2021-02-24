@@ -1,0 +1,979 @@
+//
+// Instructions: Simply put this code in a compiler and run it to generate random loadouts. Code is built for Window's OS, but the
+// only differences is the system pause commands. Simply exit the program when you wish to stop generating loadouts.
+//
+
+#include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
+#include <iostream>
+#include "weapons.h"
+
+using namespace std;
+
+int main(void)
+{
+
+    while (1)
+    {
+        subclass();
+
+        classes();
+
+        kinetic();
+
+        energy();
+
+        heavy();
+
+        system("pause");
+
+        cout << endl;
+    }
+
+}
+
+//
+//weapons header file is included below
+//
+
+#include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
+#include <iostream>
+
+
+int control = 1;
+int choice = 0;
+int loop = 1;
+static int exotic = 0;
+
+using namespace std;
+
+//Notes about special cases:
+//1. Stasis does not have subclass trees, instead has a fragment system
+//2. Only one exotic can be equipped
+//3. Trace rifles are always exotic, considered auto rifles in game
+
+void tree(void)
+{
+    time_t seed = time(NULL);
+
+    srand(seed);
+
+    choice = 1 + (rand() % 3);
+
+    switch (choice) {
+
+    case 1:
+        cout << "Top Tree ";
+        break;
+
+    case 2:
+        cout << "Middle Tree ";
+        break;
+
+    case 3:
+        cout << "Bottom Tree ";
+        break;
+
+    default:
+        break;
+    }
+}
+
+void classes(void)
+{
+
+    time_t seed = time(NULL);
+
+    srand(seed);
+
+    choice = 1 + (rand() % 3);
+
+    switch (choice) {
+
+    case 1:
+        cout << "Titan" << endl << endl;
+        break;
+
+    case 2:
+        cout << "Warlock " << endl << endl;
+        break;
+
+    case 3:
+        cout << "Hunter " << endl << endl;
+        break;
+
+    default:
+        break;
+    }
+}
+
+void subclass(void)
+{
+    time_t seed = time(NULL);
+
+    srand(seed);
+
+    choice = 1 + (rand() % 4);
+
+    switch (choice) {
+
+    case 1:
+        tree();
+        cout << "Arc ";
+        break;
+
+    case 2:
+        tree();
+        cout << "Solar ";
+        break;
+
+    case 3:
+        tree();
+        cout << "Void ";
+        break;
+
+    case 4:
+        cout << "Stasis ";
+        break;
+
+
+    default:
+        break;
+    }
+
+}
+
+void auto_rifle(void)
+{
+
+    time_t seed = time(NULL);
+
+    srand(seed);
+
+    if (exotic == 1)
+    {
+        choice = 1 + (rand() % 4);
+    }
+    else
+    {
+        choice = 1 + (rand() % 6);
+    }
+    switch (choice) {
+
+    case 1:
+        cout << "High Impact Frame Auto Rifle" << endl;
+        break;
+
+    case 2:
+        cout << "Precision Frame Auto Rifle" << endl;
+        break;
+
+    case 3:
+        cout << "Adaptive Frame Auto Rifle" << endl;
+        break;
+
+    case 4:
+        cout << "Rapid Fire Frame Auto Rifle" << endl;
+        break;
+
+    case 5:
+        cout << "Trace Rifle" << endl;
+        exotic = 1;
+        break;
+
+    case 6:
+        cout << "Exotic Auto Rifle" << endl;
+        exotic = 1;
+        break;
+
+    default:
+        break;
+    }
+}
+
+void scout_rifle(void)
+{
+
+
+    time_t seed = time(NULL);
+
+    srand(seed);
+
+    if (exotic == 1)
+    {
+        choice = 1 + (rand() % 4);
+    }
+    else
+    {
+        choice = 1 + (rand() % 5);
+    }
+
+    switch (choice) {
+
+    case 1:
+        cout << "High Impact Frame Scout Rifle" << endl;
+        break;
+
+    case 2:
+        cout << "Precision Frame Scout Rifle" << endl;
+        break;
+
+    case 3:
+        cout << "Lightweight Frame Scout Rifle" << endl;
+        break;
+
+    case 4:
+        cout << "Rapid Fire Frame Scout Rifle" << endl;
+        break;
+
+    case 5:
+        cout << "Exotic Scout Rifle" << endl;
+        exotic = 1;
+
+    default:
+        break;
+    }
+}
+
+void pulse_rifle(void)
+{
+
+
+    time_t seed = time(NULL);
+
+    srand(seed);
+
+    if (exotic == 1)
+    {
+        choice = 1 + (rand() % 5);
+    }
+    else
+    {
+        choice = 1 + (rand() % 6);
+    }
+
+    switch (choice) {
+
+    case 1:
+        cout << "High Impact Frame Pulse Rifle" << endl;
+        break;
+
+    case 2:
+        cout << "Lightweight Frame Pulse Rifle" << endl;
+        break;
+
+    case 3:
+        cout << "Adaptive Frame Pulse Rifle" << endl;
+        break;
+
+    case 4:
+        cout << "Rapid Fire Frame Pulse Rifle" << endl;
+        break;
+
+    case 5:
+        cout << "Aggressive Frame Pulse Rifle" << endl;
+        break;
+
+    case 6:
+        cout << "Exotic Pulse Rifle" << endl;
+        exotic = 1;
+        break;
+
+    default:
+        break;
+    }
+}
+
+void hand_cannon(void)
+{
+
+    time_t seed = time(NULL);
+
+    srand(seed);
+
+    if (exotic == 1)
+    {
+        choice = 1 + (rand() % 3);
+    }
+    else
+    {
+        choice = 1 + (rand() % 4);
+    }
+
+    switch (choice) {
+
+    case 1:
+        cout << "Aggressive Frame Hand Cannon" << endl;
+        break;
+
+    case 2:
+        cout << "Adaptive Frame Hand Cannon" << endl;
+        break;
+
+    case 3:
+        cout << "Precision Frame Hand Cannon" << endl;
+        break;
+
+    case 4:
+        cout << "Exotic Hand Cannon" << endl;
+        exotic = 1;
+        break;
+
+    default:
+        break;
+    }
+}
+
+void submachine_gun(void)
+{
+
+    time_t seed = time(NULL);
+
+    srand(seed);
+
+    if (exotic == 1)
+    {
+        choice = 1 + (rand() % 4);
+    }
+    else
+    {
+        choice = 1 + (rand() % 5);
+    }
+
+    switch (choice) {
+
+    case 1:
+        cout << "Precision Frame Submachine Gun" << endl;
+        break;
+
+    case 2:
+        cout << "Aggressive Frame Submachine Gun" << endl;
+        break;
+
+    case 3:
+        cout << "Lightweight Frame Submachine Gun" << endl;
+        break;
+
+    case 4:
+        cout << "Adaptive Frame Submachine Gun" << endl;
+        break;
+
+    case 5:
+        cout << "Exotic Submachine Gun" << endl;
+        exotic = 1;
+        break; 
+
+    default:
+        break;
+    }
+}
+
+void sidearm(void)
+{
+
+
+    time_t seed = time(NULL);
+
+    srand(seed);
+
+    if (exotic == 1)
+    {
+        choice = 1 + (rand() % 6);
+    }
+    else
+    {
+        choice = 1 + (rand() % 7);
+    }
+
+    switch (choice) {
+
+    case 1:
+        cout << "Precision Frame Sidearm" << endl;
+        break;
+
+    case 2:
+        cout << "Lightweight Frame Sidearm" << endl;
+        break;
+
+    case 3:
+        cout << "Adaptive Frame Sidearm" << endl;
+        break;
+
+    case 4:
+        cout << "Suros Rapid Fire Frame Sidearm" << endl;
+        break;
+
+    case 5:
+        cout << "Aggressive Burst Frame Sidearm" << endl;
+        break;
+
+    case 6:
+        cout << "Omolon Adaptive Frame Sidearm" << endl;
+        break;
+
+    case 7:
+        cout << "Exotic Sidearm" << endl;
+        exotic = 1;
+        break;
+
+    default:
+        break;
+    }
+}
+
+void bow(void)
+{
+
+    time_t seed = time(NULL);
+
+    srand(seed);
+
+    if (exotic == 1)
+    {
+        choice = 1 + (rand() % 2);
+    }
+    else
+    {
+        choice = 1 + (rand() % 3);
+    }
+
+    switch (choice) {
+
+
+    case 1:
+        cout << "Precision Frame Bow" << endl;
+        break;
+
+    case 2:
+        cout << "Lightweight Frame Bow" << endl;
+        break;
+
+    case 3:
+        cout << "Exotic Bow" << endl;
+        exotic = 1;
+        break;
+
+    default:
+        break;
+    }
+}
+
+void shotgun(void)
+{
+
+    time_t seed = time(NULL);
+
+    srand(seed);
+
+    if (exotic == 1)
+    {
+        choice = 1 + (rand() % 4);
+    }
+    else
+    {
+        choice = 1 + (rand() % 5);
+    }
+
+    switch (choice) {
+
+    case 1:
+        cout << "Precision Frame Shotgun" << endl;
+        break;
+
+    case 2:
+        cout << "Aggressive Frame Shotgun" << endl;
+        break;
+
+    case 3:
+        cout << "Lightweight Frame Shotgun" << endl;
+        break;
+
+    case 4:
+        cout << "Rapid-Fire Frame Shotgun" << endl;
+        break;
+
+    case 5:
+        cout << "Exotic Shotgun" << endl;
+        exotic = 1;
+        break;
+
+    default:
+        break;
+    }
+}
+
+void sniper_rifle(void)
+{
+    time_t seed = time(NULL);
+
+    srand(seed);
+
+    if (exotic == 1)
+    {
+        choice = 1 + (rand() % 3);
+    }
+    else
+    {
+        choice = 1 + (rand() % 4);
+    }
+
+    switch (choice) {
+
+    case 1:
+        cout << "Adaptive Frame Sniper Rifle" << endl;
+        break;
+
+    case 2:
+        cout << "Rapid Fire Frame Sniper Rifle" << endl;
+        break;
+
+    case 3:
+        cout << "Aggressive Frame Sniper Rifle" << endl;
+        break;
+
+    case 4:
+        cout << "Exotic Sniper Rifle" << endl;
+        exotic = 1;
+        break;
+
+
+    default:
+        break;
+    }
+}
+
+void grenade_launcher(void)
+{
+    time_t seed = time(NULL);
+
+    srand(seed);
+
+    if (exotic == 1)
+    {
+        choice = 1 + (rand() % 2);
+    }
+    else
+    {
+        choice = 1 + (rand() % 3);
+    }
+
+    switch (choice) {
+
+    case 1:
+        cout << "Lightweight Frame Grendade Launcher" << endl;
+        break;
+
+    case 2:
+        cout << "Wave-Frame Grenade Launcher" << endl;
+        break;
+
+    case 3:
+        cout << "Exotic Grenade Launcher" << endl;
+        exotic = 1;
+        break;
+
+
+    default:
+        break;
+    }
+}
+
+void fusion_rifle(void)
+{
+    time_t seed = time(NULL);
+
+    srand(seed);
+
+    if (exotic == 1)
+    {
+        choice = 1 + (rand() % 5);
+    }
+    else
+    {
+        choice = 1 + (rand() % 6);
+    }
+
+    switch (choice) {
+
+    case 1:
+        cout << "Precision Frame Fusion Rifle" << endl;
+        break;
+
+    case 2:
+        cout << "Adaptive Frame Fusion Rifle" << endl;
+        break;
+
+    case 3:
+        cout << "Rapid Fire Frame Fusion Rifle" << endl;
+        break;
+
+    case 4:
+        cout << "Aggressive Frame Fusion Rifle" << endl;
+        break;
+
+    case 5:
+        cout << "High Impact Frame Fusion Rifle" << endl;
+        break;
+
+    case 6:
+        cout << "Exotic Fusion Rifle" << endl;
+        exotic = 1;
+        break;
+
+
+    default:
+        break;
+    }
+}
+
+void heavy_grenade(void)
+{
+
+
+    time_t seed = time(NULL);
+
+    srand(seed);
+
+    if (exotic == 1)
+    {
+        choice = 1 + (rand() % 2);
+    }
+    else
+    {
+        choice = 1 + (rand() % 3);
+    }
+
+
+    switch (choice) {
+
+    case 1:
+        cout << "Adaptive Frame Grenade Launcher" << endl;
+        break;
+
+    case 2:
+        cout << "Rapid Fire Frame Grenade Launcher" << endl;
+        break;
+
+    case 3:
+        cout << "Exotic Grenade Launcher" << endl;
+        exotic = 1;
+        break;
+
+
+    default:
+        break;
+    }
+}
+
+void machine_gun(void)
+{
+
+
+    time_t seed = time(NULL);
+
+    srand(seed);
+
+    if (exotic == 1)
+    {
+        choice = 1 + (rand() % 3);
+    }
+    else
+    {
+        choice = 1 + (rand() % 4);
+    }
+
+
+    switch (choice) {
+
+    case 1:
+        cout << "Adaptive Frame Machine Gun" << endl;
+        break;
+
+    case 2:
+        cout << "High Impact Frame Machine Gun" << endl;
+        break;
+
+    case 3:
+        cout << "Rapid Fire Frame Machine Gun" << endl;
+        break;
+
+    case 4:
+        cout << "Exotic Machine Gun" << endl;
+        exotic = 1;
+        break;
+        ;
+
+    default:
+        break;
+    }
+}
+
+void linear_fusion(void)
+{
+
+    time_t seed = time(NULL);
+
+    srand(seed);
+
+    if (exotic == 1)
+    {
+        choice = 1;
+    }
+    else
+    {
+        choice = 1 + (rand() % 2);
+    }
+
+
+    switch (choice) {
+
+    case 1:
+        cout << "Precision Frame Linear Fusion Rifle" << endl;
+        cout << " " << endl;
+        break;
+
+    case 2:
+        cout << "Exotic Linear Fusion Rifle" << endl;
+        cout << " " << endl;
+        exotic = 1;
+        break;
+
+    default:
+        break;
+    }
+}
+
+void rocket_launcher(void)
+{
+
+    time_t seed = time(NULL);
+
+    srand(seed);
+
+    if (exotic == 1)
+    {
+        choice = 1 + (rand() % 4);
+    }
+    else
+    {
+        choice = 1 + (rand() % 5);
+    }
+
+
+    switch (choice) {
+
+    case 1:
+        cout << "Adaptive Frame Rocket Launcher" << endl;
+        break;
+
+    case 2:
+        cout << "High Impact Frame Rocket Launcher" << endl;
+        break;
+
+    case 3:
+        cout << "Aggressive Frame Rocket Launcher" << endl;
+        break;
+
+    case 4:
+        cout << "Precision Rocket Launcher" << endl;
+        break;
+
+    case 5:
+        cout << "Exotic Rocket Launcher" << endl;
+        exotic = 1;
+        break;
+
+
+    default:
+        break;
+    }
+}
+
+void sword(void)
+{
+
+    time_t seed = time(NULL);
+
+    srand(seed);
+
+    if (exotic == 1)
+    {
+        choice = 1 + (rand() % 5);
+    }
+    else
+    {
+        choice = 1 + (rand() % 6);
+    }
+    ;
+
+    switch (choice) {
+
+    case 1:
+        cout << "Caster Frame Sword" << endl;
+        break;
+
+    case 2:
+        cout << "Aggressive Frame Sword" << endl;
+        break;
+
+    case 3:
+        cout << "Lightweight Frame Sword" << endl;
+        break;
+
+    case 4:
+        cout << "Adaptive Frame Sword" << endl;
+        break;
+
+    case 5:
+        cout << "Vortex Frame Sword" << endl;
+        break;
+
+    case 6:
+        cout << "Exotic Sword" << endl;
+        exotic = 1;
+        break;
+
+    default:
+        break;
+    }
+}
+
+void kinetic(void)
+{
+
+    choice = 1 + (rand() % 10);
+
+    switch (choice) {
+
+    case 1:
+        auto_rifle();
+        break;
+
+    case 2:
+        scout_rifle();
+        break;
+
+    case 3:
+        pulse_rifle();
+        break;
+
+    case 4:
+        hand_cannon();
+        break;
+
+    case 5:
+        submachine_gun();
+        break;
+
+    case 6:
+        sidearm();
+        break;
+
+    case 7:
+        bow();
+        break;
+
+    case 8:
+        shotgun();
+        break;
+
+    case 9:
+        sniper_rifle();
+        break;
+
+    case 10:
+        grenade_launcher();
+        break;
+    }
+    cout << endl;
+}
+
+void energy(void)
+{
+
+    choice = 1 + (rand() % 11);
+
+    switch (choice) {
+
+    case 1:
+        auto_rifle();
+        break;
+
+    case 2:
+        scout_rifle();
+        break;
+
+    case 3:
+        pulse_rifle();
+        break;
+
+    case 4:
+        hand_cannon();
+        break;
+
+    case 5:
+        submachine_gun();
+        break;
+
+    case 6:
+        sidearm();
+        break;
+
+    case 7:
+        bow();
+        break;
+
+    case 8:
+        shotgun();
+        break;
+
+    case 9:
+        sniper_rifle();
+        break;
+
+    case 10:
+        fusion_rifle();
+        break;
+
+    case 11:
+        grenade_launcher();
+        break;
+    }
+    cout << endl;
+}
+
+void heavy(void)
+
+{
+    choice = 1 + (rand() % 5);
+    switch (choice) {
+
+    case 1:
+        heavy_grenade();
+        break;
+
+    case 2:
+        sword();
+        break;
+
+    case 3:
+        rocket_launcher();
+        break;
+
+    case 4:
+        linear_fusion();
+        break;
+
+    case 5:
+        machine_gun();
+        break;
+
+    default:
+        break;
+    }
+    exotic = 0;
+    cout << endl;
+}
