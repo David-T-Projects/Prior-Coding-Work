@@ -37,16 +37,17 @@ int main(void)
 //weapons header file is included below
 //
 
+#include <iostream>
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
 #include <iostream>
 
-
 int control = 1;
 int choice = 0;
 int loop = 1;
-static int exotic = 0;
+static int exotic = 0; //Global tracker for the exotic weapon. Only one can be equipped, so if one is already 
+                        //selected and exotic is chosen again, the weapon is rerolled
 
 using namespace std;
 
@@ -55,6 +56,10 @@ using namespace std;
 //2. Only one exotic can be equipped
 //3. Trace rifles are always exotic, considered auto rifles in game
 
+
+//////////////////////
+// Tree determines the subclass tree for the Arc, Solar, and Void classes
+//////////////////////
 void tree(void)
 {
     time_t seed = time(NULL);
@@ -81,11 +86,40 @@ void tree(void)
         break;
     }
 }
-
-void classes(void)
-{
-
+//////////////////////
+// Element_energy determines the element for the generated energy weapons
+//////////////////////
+void element_energy(void)
+{ 
     time_t seed = time(NULL);
+
+    srand(seed);
+    
+    choice = 1 + (rand() % 3);
+
+    switch (choice) {
+
+    case 1:
+        cout << "Arc ";
+        break;
+
+    case 2:
+        cout << "Solar ";
+        break;
+
+    case 3:
+        cout << "Void ";
+        break;
+
+    default:
+        break;
+    }
+
+}
+
+void element_power(void)
+{
+    time_t seed = time(NULL) + 20;
 
     srand(seed);
 
@@ -94,24 +128,275 @@ void classes(void)
     switch (choice) {
 
     case 1:
-        cout << "Titan" << endl << endl;
+        cout << "Arc ";
         break;
 
     case 2:
-        cout << "Warlock " << endl << endl;
+        cout << "Solar ";
         break;
 
     case 3:
-        cout << "Hunter " << endl << endl;
+        cout << "Void ";
         break;
 
     default:
         break;
     }
+
 }
+//////////////////////
+// Stasis randomly generates the  the Stasis setup for a class. 
+// 1 is Warlocks, 2 is Hunters, and 3 is Titans.
+//////////////////////
+int stasis(int classes)
+{
+    cout << "You Stasis setup is as follows:" << endl;
+
+    int aspect_count = 0;
+    int aspect_a = 0;
+    int aspect_b = 0;
+    int fragment_count = 0;
+    int choice = 0;
+    time_t seed = time(NULL);
+
+    srand(seed);
+
+    int aspect[2] = { 0 };
+    int i = 0;
+
+    while (aspect_count < 2)
+    {
+        choice = 1 + (rand() % 4); 
+        choice = 1 + (rand() % 4); //This reroll of choice eliminate bias towards the number 4 aspect.
+        //Ensures that an aspect is not selected two times, as one can only be chosen once
+        while (choice == aspect[0] || choice == aspect[1]) 
+        {
+            choice = 1 + (rand() % 4);
+        }
+
+        aspect[i] = choice;
+        if (choice == 1)
+        {
+            if (classes == 1)
+            {
+                cout << "Ice Flare Bolts" << endl;
+                aspect[i] = 1;
+                fragment_count += 2;
+            }
+
+            if (classes == 2)
+            {
+                cout << "Winter's Shroud" << endl;
+                aspect[i] = 1;
+                fragment_count += 1;
+            }
+
+            if (classes == 3)
+            {
+                cout << "Cryoclasm" << endl;
+                aspect[i] = 1;
+                fragment_count += 1;
+            }
+        }
+
+        if (choice == 2)
+        {
+
+            if (classes == 1)
+            {
+                cout << "Frost Pulse" << endl;
+                aspect[i] = 2;
+                fragment_count += 2;
+            }
+
+            if (classes == 2)
+            {
+                cout << "Shatterdive" << endl;
+                aspect[i] = 2;
+                fragment_count += 1;
+
+            }
+
+            if (classes == 3)
+            {
+                cout << "Tetonic Harvest" << endl;
+                aspect[i] = 2;
+                fragment_count += 2;
+            }
+        }
+
+        if (choice == 3)
+        {
+            if (classes == 1)
+            {
+                cout << "Bleak Watcher" << endl;
+                aspect[i] = 3;
+                fragment_count += 1;
+            }
+
+            if (classes == 2)
+            {
+                cout << "Grim Harvest" << endl;
+                aspect[i] = 3;
+                fragment_count += 2;
+
+            }
+
+            if (classes == 3)
+            {
+                cout << "Howl of the Storm" << endl;
+                aspect[i] = 3;
+                fragment_count += 2;
+            }
+        }
+
+        if (choice == 4)
+        {
+            if (classes == 1)
+            {
+                cout << "Glacial Harvest" << endl;
+                aspect[i] = 4;
+                fragment_count += 2;
+            }
+
+            if (classes == 2)
+            {
+                cout << "Touch of Winter" << endl;
+                aspect[i] = 4;
+                fragment_count += 2;
+
+            }
+
+            if (classes == 3)
+            {
+                cout << "Diamond Spear" << endl;
+                aspect[i] = 4;
+                fragment_count += 1;
+            }
+        }
+
+
+        aspect_count++;
+        i++;
+    }
+    int fragment[5] = { 999,999,999,999,999 };
+    i = 0;
+
+    srand(seed);
+
+
+    while (fragment_count != 0)
+    {
+        choice = 1 + (rand() % 14);
+
+        //Ensures that a fragment is not selected more than one time
+        while (choice == fragment[0] || choice == fragment[1] || choice == fragment[2] || choice == fragment[3] ||
+            choice == fragment[4])
+        {
+            choice = 1 + (rand() % 14);
+        }
+
+        switch (choice) {
+
+        case 1:
+            fragment[i] = choice;
+            cout << "Whisper of Hedrons" << endl;
+            break;
+
+        case 2:
+            fragment[i] = choice;
+            cout << "Whisper of Fissures" << endl;
+            break;
+
+        case 3:
+            fragment[i] = choice;
+            cout << "Whisper of Refraction" << endl;
+            break;
+
+        case 4:
+            fragment[i] = choice;
+            cout << "Whisper of Durance" << endl;
+            break;
+
+        case 5:
+            fragment[i] = choice;
+            cout << "Whisper of Bonds" << endl;
+            break;
+
+        case 6:
+            fragment[i] = choice;
+            cout << "Whisper of Shards" << endl;
+            break;
+
+        case 7:
+            fragment[i] = choice;
+            cout << "Whisper of Chains" << endl;
+            break;
+
+        case 8:
+            fragment[i] = choice;
+            cout << "Whisper of Torment" << endl;
+            break;
+
+        case 9:
+            fragment[i] = choice;
+            cout << "Whisper of Fractures" << endl;
+            break;
+
+        case 10:
+            fragment[i] = choice;
+            cout << "Whisper of Impetus" << endl;
+            break;
+
+        case 11:
+            fragment[i] = choice;
+            cout << "Whisper of Conduction" << endl;
+            break;
+
+        case 12:
+            fragment[i] = choice;
+            cout << "Whisper of Hunger" << endl;
+            break;
+
+        case 13:
+            fragment[i] = choice;
+            cout << "Whisper of Rending" << endl;
+            break;
+
+        case 14:
+            fragment[i] = choice;
+            cout << "Whisper of Rime" << endl;
+            break;
+        default:
+            break;
+        }
+
+        fragment_count--;
+        i++;
+    }
+    cout << endl;
+    return 0;
+}
+
+/////////////////////////////////////
+//Subclass prompts the user to input thier prefered class, and then randomly
+//selects one of the 4 subclass options: Arc, Solar, Void, or Stasis.
+/////////////////////////////////////
+
 
 void subclass(void)
 {
+    int classes = 0;
+    cout << "Enter the number of the class you want to play" << endl << endl;
+    cout << "1. Warlock" << endl << "2. Hunter" << endl << "3. Titan" << endl;
+    cin >> classes;
+    cout << endl;
+    while (classes > 3 || classes < 1)
+    {
+        cout << "Invalid Selection, please re-enter your selection" << endl;
+        cin >> classes;
+    }
+
     time_t seed = time(NULL);
 
     srand(seed);
@@ -138,15 +423,34 @@ void subclass(void)
     case 4:
         cout << "Stasis ";
         break;
-
-
     default:
         break;
     }
 
+
+    if (classes == 1)
+        cout << "Warlock" << endl << endl;
+
+
+    if (classes == 2)
+        cout << "Hunter" << endl << endl;
+
+    if (classes == 3)
+        cout << "Titan" << endl << endl;
+
+    if (choice == 4)
+    {
+        stasis(classes);
+    }
 }
 
-void auto_rifle(void)
+/////////////////////////////////////
+// The following functions below are the weapons functions.
+// These geneerate a random frame type or designate it an exotic
+// once the weapon is selected.
+/////////////////////////////////////
+
+int auto_rifle(int kinetic)
 {
 
     time_t seed = time(NULL);
@@ -159,7 +463,7 @@ void auto_rifle(void)
     }
     else
     {
-        choice = 1 + (rand() % 6);
+        choice = 1 + (rand() % 5);
     }
     switch (choice) {
 
@@ -180,18 +484,36 @@ void auto_rifle(void)
         break;
 
     case 5:
-        cout << "Trace Rifle" << endl;
-        exotic = 1;
-        break;
 
-    case 6:
-        cout << "Exotic Auto Rifle" << endl;
-        exotic = 1;
+        if (kinetic == 1)
+        {
+            choice = 1 + (rand() % 7);
+            if (choice <= 2)
+            {
+                cout << "Exotic Auto Rifle" << endl;
+                exotic = 1;
+            }
+            else
+            {
+                //Since Trace Rifles are only exoitc, they are inccluded with Auto Rifles for the purposes of exotic selection.
+                //Trace Rifles are only energy, the kinetic weapon has to be filled first.
+                cout << "Exotic Trace Rifle" << endl;
+                exotic = 1;
+            }
+        }
+
+        if (kinetic == 0)
+        {
+            cout << "Exotic Auto Rifle" << endl;
+            exotic = 1;
+        }
+
         break;
 
     default:
         break;
     }
+    return(1);
 }
 
 void scout_rifle(void)
@@ -371,10 +693,8 @@ void submachine_gun(void)
     }
 }
 
-void sidearm(void)
+int sidearm(int kinetic)
 {
-
-
     time_t seed = time(NULL);
 
     srand(seed);
@@ -403,7 +723,12 @@ void sidearm(void)
         break;
 
     case 4:
-        cout << "Suros Rapid Fire Frame Sidearm" << endl;
+        if (kinetic == 0)
+            cout << "Suros Rapid Fire Frame Sidearm" << endl;
+
+        if (kinetic == 1)
+            cout << "Precision Frame Sidearm" << endl;
+       
         break;
 
     case 5:
@@ -411,7 +736,12 @@ void sidearm(void)
         break;
 
     case 6:
-        cout << "Omolon Adaptive Frame Sidearm" << endl;
+        if(kinetic == 0)
+            cout << "Omolon Adaptive Frame Sidearm" << endl;
+        
+        if (kinetic == 1)
+            cout << "Adaptive Frame Sidearm" << endl;
+
         break;
 
     case 7:
@@ -422,6 +752,7 @@ void sidearm(void)
     default:
         break;
     }
+    return 0;
 }
 
 void bow(void)
@@ -545,7 +876,7 @@ void sniper_rifle(void)
     }
 }
 
-void grenade_launcher(void)
+int grenade_launcher(int kinetic)
 {
     time_t seed = time(NULL);
 
@@ -567,7 +898,12 @@ void grenade_launcher(void)
         break;
 
     case 2:
-        cout << "Wave-Frame Grenade Launcher" << endl;
+        if(kinetic == 0)
+            cout << "Wave-Frame Grenade Launcher" << endl;
+
+        if (kinetic == 1)
+            cout << "Lightweight Frame Grenade Launcher" << endl;
+
         break;
 
     case 3:
@@ -579,6 +915,7 @@ void grenade_launcher(void)
     default:
         break;
     }
+    return 0;
 }
 
 void fusion_rifle(void)
@@ -717,7 +1054,7 @@ void linear_fusion(void)
     time_t seed = time(NULL);
 
     srand(seed);
-
+    
     if (exotic == 1)
     {
         choice = 1;
@@ -727,6 +1064,7 @@ void linear_fusion(void)
         choice = 1 + (rand() % 2);
     }
 
+    //Since Linear Fusions have only 1 frame type, this helps reduce bias towards exotic linear fusions
 
     switch (choice) {
 
@@ -840,16 +1178,18 @@ void sword(void)
         break;
     }
 }
-
+///////////////////////
+// This generates the Kinetic Weapon
+//////////////////////
 void kinetic(void)
 {
 
     choice = 1 + (rand() % 10);
-
+    int kinetic = 1;
     switch (choice) {
 
     case 1:
-        auto_rifle();
+        auto_rifle(kinetic);
         break;
 
     case 2:
@@ -869,7 +1209,7 @@ void kinetic(void)
         break;
 
     case 6:
-        sidearm();
+        sidearm(kinetic);
         break;
 
     case 7:
@@ -885,21 +1225,26 @@ void kinetic(void)
         break;
 
     case 10:
-        grenade_launcher();
+        grenade_launcher(kinetic);
         break;
     }
     cout << endl;
 }
-
+///////////////////////
+// This generates the Energy Weapon
+//////////////////////
 void energy(void)
 {
+    int kinetic = 0;
+
+    element_energy();
 
     choice = 1 + (rand() % 11);
 
     switch (choice) {
 
     case 1:
-        auto_rifle();
+        auto_rifle(kinetic);
         break;
 
     case 2:
@@ -919,7 +1264,7 @@ void energy(void)
         break;
 
     case 6:
-        sidearm();
+        sidearm(kinetic);
         break;
 
     case 7:
@@ -939,16 +1284,21 @@ void energy(void)
         break;
 
     case 11:
-        grenade_launcher();
+        grenade_launcher(kinetic);
         break;
     }
     cout << endl;
 }
-
+///////////////////////
+// This generates the Heavy Weapon
+//////////////////////
 void heavy(void)
 
 {
+    element_power();
+
     choice = 1 + (rand() % 5);
+
     switch (choice) {
 
     case 1:
@@ -974,6 +1324,6 @@ void heavy(void)
     default:
         break;
     }
-    exotic = 0;
+    exotic = 0; //Resets the tracker marking if an exoitc is selected
     cout << endl;
 }
