@@ -344,6 +344,7 @@ int main()
 	cout << "Option 3: Total Precipitation by Station" << endl;
 	cout << "Option 4: Temperature Extremes and Average by Station " << endl;
 	cout << "Option 5: Temperature Extremes and Average by Station over a range of dates." << endl;
+	cout << "Option 6: Print the Entire Data Set." << endl;
 
 	cin >> option;
 	cin.get(cin_clear);
@@ -691,6 +692,16 @@ int main()
 			<< avg_tmax << " degress Fahrenheit." << endl << "An average low of "
 			<< avg_tmin << " degress Fahrenheit." << endl;
 	}
+
+	if (option == 6)
+		getline(infile, dataline);
+		cout << "STATION NAME                                       DATE        PRCP      TMAX	   TMIN " << endl;
+		cout << "---------------------------------------------------------------------------------------";
+		while (!infile.eof()) {
+			getline(infile, dataline);
+			cout << dataline << endl;
+		}
+
 }
 
 void removeSpaces(string& str)
