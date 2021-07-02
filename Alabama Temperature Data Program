@@ -1,0 +1,748 @@
+//////////////////////////////////////////////////////////////////////////////////////////
+//Program to process Alabama temperature data
+//Author: David Tollett
+//Notes: The data set given is for March, 2018. Other dates can be used, but the data has
+// to be from Alabama.
+//////////////////////////////////////////////////////////////////////////////////////////
+
+#include <iostream>
+#include <fstream>
+#include <iomanip>
+#include <string>
+#include <cctype>
+#include <stdlib.h>
+
+using namespace std;
+
+void removeSpaces(string& str);
+string station_format(string& str, string dataline);
+
+int main()
+{
+	//////////////////////////////////////////////////////////////////////////////////////////
+	// 	   Part 1 Begins Here. Here, records with bad data flags are omitted. The output file,
+	//	   Filtered_AL_Weather_Station is used in the next part to further narrow the results
+	//////////////////////////////////////////////////////////////////////////////////////////
+
+
+	string dataline = "", station = "", tmax_s = "", tmin_s = "", prcp_s = "";
+
+	unsigned int pos_station_name = 0;
+	unsigned int pos_date = 0;
+	unsigned int pos_prcp = 0;
+	unsigned int pos_tmax = 0;
+	unsigned int pos_tmin = 0;
+
+	float prcp = 0, tmax = 0, tmin = 0;
+
+	ifstream infile;
+	ofstream outfile;
+
+	cout << "WEATHER STATION DATA" << endl << endl;
+	infile.open("C:/Users/djtol/Desktop/Schools Stuff/Temp/AL_Weather_Station.txt");
+
+	if (!infile)
+	{
+		cout << "Unable to open the input file. " << endl;
+		return(1);
+	}
+	else
+	{
+		cout << "Data file opened." << endl;
+	}
+
+	outfile.open("C:/Users/djtol/Desktop/Schools Stuff/Temp/Filtered_AL_Weather_Station.txt");
+
+	if (!outfile)
+	{
+		cout << "Unable to open the output file. " << endl;
+		return(1);
+	}
+	else
+	{
+		cout << "Output file opened." << endl;
+	}
+
+	getline(infile, dataline);
+	outfile << dataline << endl;
+
+	pos_prcp = dataline.find("PRCP");
+	// These if statments print out the starting location of each of the data types
+	// confirming their presence in the file.
+	if (pos_prcp <= dataline.length())
+	{
+		cout << "PRCP begins at column: " << pos_prcp << endl;
+	}
+	pos_tmax = dataline.find("TMAX");
+	if (pos_tmax <= dataline.length())
+	{
+		cout << "TMAX begins at column: " << pos_tmax << endl;
+	}
+	pos_tmin = dataline.find("TMIN");
+	if (pos_tmin <= dataline.length())
+	{
+		cout << "TMIN begins at column: " << pos_tmin << endl;
+	}
+
+	getline(infile, dataline);
+	outfile << dataline << endl;
+
+	while (!infile.eof())
+	{
+		getline(infile, dataline);
+
+		prcp_s = dataline.substr(pos_prcp, 5);
+		tmax_s = dataline.substr(pos_tmax, 5);
+		tmin_s = dataline.substr(pos_tmin, 5);
+
+		prcp = stod(prcp_s);
+		tmax = stod(tmax_s);
+		tmin = stod(tmin_s);
+
+
+		// Makes sure bad data flags aren't written to the new file
+		if (prcp != -9999 && tmax != -9999 && tmin != -9999)
+			outfile << dataline << endl;
+	}
+
+	//This is added to occupy a blank line left by the last endl in the while loop
+	//This way, a set of code in the next program can address the blank line, and 
+	//stop aborts from occuring.
+	outfile << "Data Ends Here";
+
+	infile.close();
+	outfile.close();
+
+	//////////////////////////////////////////////////////////////////////////////////////////
+	// 	   Part 2 Begins Here. Here, the previous output file, Filtered_AL_Weather_Station,
+	// 	   is further narrowed down, creating a new file, weather_station_five_column, with
+	// 	   only the station name, date, precipitation, and the maximium and maximum temperature
+	//////////////////////////////////////////////////////////////////////////////////////////
+
+	// Resetting Variables
+	station = "", tmax_s = "", tmin_s = "", prcp_s = "";
+
+	int counter = 1;
+	pos_station_name = 0;
+	pos_date = 0;
+	pos_prcp = 0;
+	pos_tmax = 0;
+	pos_tmin = 0;
+
+	prcp = 0, tmax = 0, tmin = 0;
+
+	infile.open("C:/Users/djtol/Desktop/Schools Stuff/Temp/Filtered_AL_Weather_Station.txt");
+
+	if (!infile)
+	{
+		cout << "Unable to open the input file. " << endl;
+		return(1);
+	}
+	else
+	{
+		cout << "Input file opened." << endl;
+	}
+
+	outfile.open("C:/Users/djtol/Desktop/Schools Stuff/Temp/weather_station_five_column.txt");
+
+	if (!outfile)
+	{
+		cout << "Unable to open the input file. " << endl;
+		return(1);
+	}
+	else
+	{
+		cout << "Output file opened." << endl;
+	}
+
+	getline(infile, dataline);
+
+
+	// Pulls out the header location for each data set
+	pos_station_name = dataline.find("STATION_NAME");
+	if (pos_station_name <= dataline.length())
+	{
+		outfile << setw(70) << dataline.substr(pos_station_name, 51);
+	}
+
+	pos_date = dataline.find("DATE");
+	if (pos_date <= dataline.length())
+	{
+		outfile << setw(9) << dataline.substr(pos_date, 9);
+	}
+
+	pos_prcp = dataline.find("PRCP");
+	if (pos_prcp <= dataline.length())
+	{
+		outfile << setw(8) << dataline.substr(pos_prcp, 5);
+	}
+	pos_tmax = dataline.find("TMAX");
+	if (pos_tmax <= dataline.length())
+	{
+		outfile << setw(10) << dataline.substr(pos_tmax, 6);
+	}
+	pos_tmin = dataline.find("TMIN");
+	if (pos_tmin <= dataline.length())
+	{
+		outfile << dataline.substr(pos_tmin, 5) << endl;
+	}
+	outfile << endl;
+
+	getline(infile, dataline);
+	while (!infile.eof())
+	{
+
+		getline(infile, dataline);
+
+		//This checks for the end of file flag that covered the blank line, and exits the loop preventing a crash
+		if (dataline == "Data Ends Here")
+		{
+			break;
+		}
+
+		string station_s = dataline.substr(pos_station_name, 51);
+		string date_s = dataline.substr(pos_date, 9);
+
+		//This pusts spaces in the date data set, seperating months, years, and days
+		for (int pos = 0; pos < date_s.length(); pos++)
+		{
+			if (pos == 3)
+			{
+				date_s.insert(4, " ");
+			}
+			else if (pos == 6)
+			{
+				date_s.insert(7, " ");
+			}
+			else if (pos == 9)
+			{
+				date_s.insert(10, " ");
+			}
+		}
+
+		//Converts the temperatures to Celsius
+
+		prcp_s = dataline.substr(pos_prcp, 5);
+		tmax_s = dataline.substr(pos_tmax, 5);
+		tmin_s = dataline.substr(pos_tmin, 5);
+
+		tmax = stof(tmax_s) / 10;
+		tmin = stof(tmin_s) / 10;
+
+		tmax = (tmax * 9 / 5) + 32;
+		tmin = (tmin * 9 / 5) + 32;
+
+		removeSpaces(station_s);
+
+		outfile.setf(ios::left);
+		outfile << setw(51) << station_s;
+		outfile << setw(10) << date_s << setw(10) << prcp_s;
+		outfile << fixed << setprecision(2) << setw(10) << tmax << tmin << endl;
+		counter++;
+	}
+	//Addresses the blank line issue from the while loop ending with an endl opening up a blank line.
+	outfile << "End-File";
+
+	infile.close();
+	outfile.close();
+
+	//////////////////////////////////////////////////////////////////////////////////////////
+	// 	   Part 3 Begins Here. Here, user is now able to search through the data.
+    /////////////////////////////////////////////////////////////////////////////////////////
+	string tmin_station = "", tmin_station2 = "", tmax_station = "", mm = "", dd = "", yyyy = "";
+	string date = "", date2 = "", date_holder = "", precip = "", user_station = "";
+	int year_finder = 0, find_ = 0, date_num = 0, date2_num = 0, day_num = 0, length = 0, length2 = 0, option = 0;
+	int position = 0;
+
+	station = "";
+	counter = 0;
+	tmax = 0;
+	tmin = 0;
+
+	float precip_float = 0, precip_total = 0, max_tmax = 0, min_tmin2 = 0, avg_tmin = 0, avg_tmax = 0;
+	float min_tmin = 999999;
+
+
+	dataline = "0";
+	string sentinel = "Data Ends Here";
+	char cin_clear = ' ';
+
+
+	infile.open("C:/Users/djtol/Desktop/Schools Stuff/Temp/weather_station_five_column.txt");
+
+	if (!infile)
+	{
+		cout << "Unable to open the input file. " << endl;
+		return(1);
+	}
+
+	getline(infile, dataline);
+	getline(infile, dataline);
+
+	while (!infile.eof())
+	{
+		getline(infile, dataline);
+
+		//This check prevents the end of file placeholder from crashing the program
+		if (dataline == "End-File")
+		{
+			break;
+		}
+
+		station = dataline.substr(0, 51);
+
+		tmax = stof(dataline.substr(73, 5));
+		if (tmax >= max_tmax)
+		{
+			max_tmax = tmax;
+			tmax_station = station;
+		}
+
+		tmin = stof(dataline.substr(83, 5));
+		if (tmin < min_tmin)
+		{
+			min_tmin = tmin;
+			tmin_station = station;
+		}
+		if (tmin == min_tmin)
+		{
+			min_tmin2 = tmin;
+			tmin_station2 = station;
+		}
+	}
+
+	//These blocks of code remove the excess spaces from the station name for formatting purposes
+	length2 = tmax_station.length();
+	length = tmax_station.find("  ");
+	tmax_station.erase(length, length2);
+
+	length2 = tmin_station.length();
+	length = tmin_station.find("  ");
+	tmin_station.erase(length, length2);
+
+	length2 = tmin_station2.length();
+	length = tmin_station2.find("  ");
+	tmin_station2.erase(length, length2);
+
+	cout << "The highest temperature was recorded at " << tmax_station << " with a temperature of " << max_tmax << " degrees Celsius" << endl;
+
+	cout << "The lowest temperature was recorded at " << tmin_station << " and " << tmin_station2 << " with a temperature of " << min_tmin << " degrees Celsius" << endl << endl;
+
+
+	infile.close();
+	infile.open("C:/Users/djtol/Desktop/Schools Stuff/Temp/weather_station_five_column.txt");
+	if (!infile)
+	{
+		cout << "Unable to open the input file. " << endl;
+		return(1);
+	}
+	cout << "Welcome to the Alabama Weather Data Analyzer" << endl << endl;
+	cout << "Choose an option and type its number for further investigation" << endl;
+
+	cout << "Option 1: Total Precipitation from all stations on a single day" << endl;
+	cout << "Option 2: Total Precipitation over a range of dates " << endl;
+	cout << "Option 3: Total Precipitation by Station" << endl;
+	cout << "Option 4: Temperature Extremes and Average by Station " << endl;
+	cout << "Option 5: Temperature Extremes and Average by Station over a range of dates." << endl;
+
+	cin >> option;
+	cin.get(cin_clear);
+
+	if (option == 1)// Total Precipitation from all stations on a single day
+	{
+		cout << "Enter the date in the following format:  MM DD YYYY" << endl;
+		cin >> mm >> dd >> yyyy;
+
+		//Reorders the date
+		date = yyyy + ' ' + mm + ' ' + dd;
+
+		getline(infile, dataline);
+		getline(infile, dataline);
+
+		while (!infile.eof())
+		{
+			getline(infile, dataline);
+
+			//Prevents the end of file marker from crashing the program
+			if (dataline == "End-File")
+			{
+				break;
+			}
+			//Reuses a previous variable
+			year_finder = dataline.find(date);
+
+			
+			if (year_finder != -1)
+			{
+				//Once the date is found, pulls out the substring for precipitation and
+				//converts it to a float where it is then added to the total
+				precip = dataline.substr(62, 6);
+				precip_float = stof(precip);
+				precip_total += precip_float;
+			}
+		}
+		//Changes the date back to match the user's input.
+		date.replace(0, 4, "");
+		date.append(" ");
+		date.append( yyyy);
+		cout << "The total rainfall on" << date << " was " << precip_total << " inches." << endl;
+	}
+
+	if (option == 2)
+	{
+		int month1, month2 = 0;
+		string month1_str = "";
+		string month2_str = "";
+		cout << "Enter a range of dates (First then Last) in the following format: MM DD YYYY" << endl;
+
+		cin >> mm >> dd >> yyyy;
+
+		month1 = stod(mm);
+
+		//Determines the month based on user input.
+		switch (month1)
+		{
+
+		case 1:
+			month1_str = "January";
+			break;
+		case 2:
+			month1_str = "February";
+			break;
+		case 3:
+			month1_str = "March";
+			break;
+		case 4:
+			month1_str = "April";
+			break;
+		case 5:
+			month1_str = "May";
+			break;
+		case 6:
+			month1_str = "June";
+			break;
+		case 7:
+			month1_str = "July";
+			break;
+		case 8:
+			month1_str = "August";
+			break;
+		case 9:
+			month1_str = "September";
+			break;
+		case 10:
+			month1_str = "October";
+			break;
+		case 11:
+			month1_str = "November";
+			break;
+		case 12:
+			month1_str = "December";
+			break;
+
+		default:
+			break;
+		}
+
+		date = dd;
+		date_num = stof(date);
+
+		cin >> mm >> dd >> yyyy;
+
+		month2 = stod(mm);
+
+		switch (month2)
+		{
+
+		case 1:
+			month2_str = "January";
+			break;
+		case 2:
+			month2_str = "February";
+			break;
+		case 3:
+			month2_str = "March";
+			break;
+		case 4:
+			month2_str = "April";
+			break;
+		case 5:
+			month2_str = "May";
+			break;
+		case 6:
+			month2_str = "June";
+			break;
+		case 7:
+			month2_str = "July";
+			break;
+		case 8:
+			month2_str = "August";
+			break;
+		case 9:
+			month2_str = "September";
+			break;
+		case 10:
+			month2_str = "October";
+			break;
+		case 11:
+			month2_str = "November";
+			break;
+		case 12:
+			month2_str = "December";
+			break;
+		default:
+			break;
+		}
+		date2 = dd;
+		date2_num = stof(date2);
+
+		//date_num is starting date, date2_num is ending date
+
+		getline(infile, dataline);
+		getline(infile, dataline);
+
+		while (!infile.eof())
+		{
+			getline(infile, dataline);
+
+			//Prevents the End of File marker from breaking the program
+			if (dataline == "End-File")
+			{
+				break;
+			}
+			//Pulls out the date from each line in the file, namely the number of the day, and compares it to the starting and ending dates.
+			//If it falls between them, the precitpiation is pulled, converted to a float, and added to the total.
+			day_num = stof(dataline.substr(59, 2));
+
+			if (date_num <= day_num && day_num <= date2_num)
+			{
+				precip = dataline.substr(62, 6);
+				precip_float = stof(precip);
+				precip_total += precip_float;
+			}
+		}
+		cout << "The total rainfall from " << month1_str << " " << date_num << " to " << month2_str << " " << date2_num
+			<< " across the entire state was " << precip_total << " inches." << endl;
+	}
+
+	if (option == 3)
+	{
+		cout << "Enter a station name to get precipitation data" << endl;
+
+		cin >> user_station;
+
+		getline(infile, dataline);
+		getline(infile, dataline);
+
+		while (!infile.eof())
+		{
+			getline(infile, dataline);
+
+			position = dataline.find(user_station);
+
+			if (position != -1)
+			{
+				precip = dataline.substr(63, 4);
+				precip_float = stof(precip);
+				precip_total += precip_float;
+			}
+		}
+
+		cout << "The total rainfall for stations with " << user_station << " in the name was "
+			<< precip_total << " inches." << endl;
+	}
+
+	if (option == 4)
+	{
+		max_tmax = 0;
+		min_tmin = 999999;
+
+		cout << "Enter a station name exactly to get weather data" << endl;
+
+		getline(cin, user_station);
+
+		getline(infile, dataline);
+		getline(infile, dataline);
+
+		while (!infile.eof())
+		{
+			getline(infile, dataline);
+
+			//Prevents the End of File marker from breaking the program
+			if (dataline == "End-File")
+			{
+				break;
+			}
+
+			day_num = stof(dataline.substr(59, 2));
+
+			station = dataline.substr(0, 51);
+
+			//Removes excess spaces so the station can match the user's station.
+			station_format(station, dataline);
+
+			if (user_station == station)
+			{
+				//Pulls the temperature max from the file, converts to a number, and compares with the current maximum temperature.
+				//Temperature Min follows the same logic.
+				tmax = stof(dataline.substr(73, 5));
+
+				if (tmax > max_tmax)
+				{
+					max_tmax = tmax;
+				}
+				avg_tmax += tmax;
+
+				tmin = stof(dataline.substr(83, 5));
+
+				if (tmin < min_tmin)
+				{
+					min_tmin = tmin;
+				}
+				avg_tmin += tmin;
+				counter++;
+			}
+		}
+
+		avg_tmax = (avg_tmax / counter);
+		avg_tmin = (avg_tmin / counter);
+
+
+		cout << "The station " << user_station << " had:" << endl << "A high of "
+			<< max_tmax << " degress Fahrenheit." << endl << "A low of "
+			<< min_tmin << " degress Fahrenheit." << endl << setprecision(4) << "An average high of "
+			<< avg_tmax << " degress Fahrenheit." << endl << "An average low of "
+			<< avg_tmin << " degress Fahrenheit." << endl;
+	}
+
+	if (option == 5)
+	{
+		float max_tmax = 0;
+		float min_tmin = 999999;
+
+
+		cout << "Enter a station name" << endl;
+
+		getline(cin, user_station);
+
+		cout << "Enter a start date, 1-30" << endl;
+
+		cin >> date_num;
+
+		cout << "Enter an end date, 1-30" << endl;
+
+		cin >> date2_num;
+
+		while (date2_num >= date_num)
+		{
+			cout << "Please reneter the dates so that the first day occurs before the second" << endl;
+			cin >> date_num;
+			cout << endl;
+			cin >> date2_num;
+			cout << endl;
+		}
+
+		getline(infile, dataline);
+		getline(infile, dataline);
+
+		while (!infile.eof())
+		{
+			getline(infile, dataline);
+
+			//Prevents the End of File marker from breaking the program
+			if (dataline == "End-File")
+			{
+				break;
+			}
+
+			day_num = stof(dataline.substr(59, 2));
+
+			station = dataline.substr(0, 51);
+
+			station_format(station, dataline);
+
+			if (user_station == station && date_num <= day_num && day_num <= date2_num)
+			{
+				tmax = stof(dataline.substr(73, 5));
+				if (tmax > max_tmax)
+				{
+					max_tmax = tmax;
+				}
+				avg_tmax += tmax;
+
+				tmin = stof(dataline.substr(83, 5));
+				if (tmin < min_tmin)
+				{
+					min_tmin = tmin;
+				}
+				avg_tmin += tmin;
+				counter++;
+			}
+		}
+
+		avg_tmax = (avg_tmax / counter);
+		avg_tmin = (avg_tmin / counter);
+		date_num = date2_num - date_num;
+
+		cout << "The station " << user_station << " had the following temperatures over " << date_num <<
+			" days:" << endl << "A high of "
+			<< max_tmax << " degress Fahrenheit." << endl << "A low of "
+			<< min_tmin << " degress Fahrenheit." << endl << setprecision(4) << "An average high of "
+			<< avg_tmax << " degress Fahrenheit." << endl << "An average low of "
+			<< avg_tmin << " degress Fahrenheit." << endl;
+	}
+}
+
+void removeSpaces(string& str)
+{
+	int len = str.length();
+	int i = 0, j = -1;
+
+	bool spaceFound = false;
+
+	while (++j < len && str[j] == ' ');
+	while (j < len)
+	{
+		if (str[j] != ' ')
+		{
+			// remove preceding spaces before dot,
+			// comma & question mark
+			if ((str[j] == '.' || str[j] == ',' || str[j] == '?') && i - 1 >= 0
+				&& str[i - 1] == ' ')
+				str[i - 1] = str[j++];
+			else
+				str[i++] = str[j++];
+			spaceFound = false;
+		}
+
+		else if (str[j++] == ' ')
+		{
+			if (!spaceFound)
+			{
+				str[i++] = ' ';
+				spaceFound = true;
+			}
+		}
+	}
+	// Removes trailing spaces
+	if (i <= 1)
+		str.erase(str.begin() + i, str.end());
+	else
+		str.erase(str.begin() + i - 1, str.end());
+}
+
+//station_format formats the station name to only have the station name, no extra spaces or state/country.
+//This is used to ensure that it matches the user's input if the name is shared.
+string station_format(string& str, string dataline)
+{
+	int length2 = 0, length = 0;
+	length2 = str.length();
+	length = dataline.find(" AL US");
+	str.erase(length, 6);
+	length = str.find("  ");
+	if (length != -1)
+	{
+		str.erase(length, length2 - length);
+	}
+	return(str);
+}
