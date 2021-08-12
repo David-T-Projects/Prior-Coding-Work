@@ -694,6 +694,7 @@ int main()
 	}
 
 	if (option == 6)
+	{
 		getline(infile, dataline);
 		cout << "STATION NAME                                       DATE        PRCP      TMAX	   TMIN " << endl;
 		cout << "---------------------------------------------------------------------------------------";
@@ -701,7 +702,7 @@ int main()
 			getline(infile, dataline);
 			cout << dataline << endl;
 		}
-
+	}
 }
 
 void removeSpaces(string& str)
